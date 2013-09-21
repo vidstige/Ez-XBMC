@@ -75,7 +75,7 @@ namespace XBMCompanion
         {
             if (!Directory.Exists(_targetFolder)) return;
 
-            foreach (var f in Directory.EnumerateFiles(_folder))
+            foreach (var f in Directory.EnumerateFiles(_sourceFolder))
             //foreach (var f in new[] { "Breaking.Bad.S05E10.HDTV.x264-ASAP.avi", "Breaking.Bad.S05E11.HDTV.x264-ASAP.avi", "Breaking.Bad.S05E12.HDTV.x264-EVOLVE.avi", "anotherfile.txt" })
             {
                 var match = Regex.Match(f, "(.*)\\.S([0-9][0-9])E([0-9][0-9])");
