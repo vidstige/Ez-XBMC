@@ -2,9 +2,6 @@
 
 namespace XBMCompanion
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private readonly MainViewModel _viewModel;
@@ -15,9 +12,9 @@ namespace XBMCompanion
             DataContext = _viewModel;
         }
 
-        private void Search_Clicked(object sender, RoutedEventArgs e)
+        private void Browse_Clicked(object sender, RoutedEventArgs e)
         {
-            _viewModel.Search();
+
         }
     }
 }
