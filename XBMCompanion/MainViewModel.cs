@@ -2,41 +2,47 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using XBMCompanion.Properties;
 
 namespace XBMCompanion
 {
     public class MainViewModel: ViewModel
     {
         private readonly List<string> _log = new List<string>();
-        private string _sourceFolder;
-        private string _targetFolder;
         private FileSystemWatcher _sourceWatcher;
 
         internal void Browse()
-        {            
+        {
         }
 
         public string SourceFolder
         {
-            get { return _sourceFolder; }
+            get { return Settings.Default.SourceFolder; }
             set
             {
-                _sourceFolder = value;
+                Settings.Default.SourceFolder = value;
+                Settings.Default.Save();
+
                 RaisePropertyChanged("SourceFolder");
                 MoveFiles();
 
-                if (Directory.Exists(_sourceFolder))
-                {
-                    if (_sourceWatcher != null)
-                    {
-                        _sourceWatcher.Changed -= SourceChanged;
-                    }
+                WatchSource();
+            }
+        }
 
-                    _sourceWatcher = new FileSystemWatcher(_sourceFolder);
-                    _sourceWatcher.NotifyFilter = NotifyFilters.LastWrite;
-                    _sourceWatcher.Changed += SourceChanged;
-                    _sourceWatcher.EnableRaisingEvents = true;
+        private void WatchSource()
+        {
+            if (Directory.Exists(Settings.Default.SourceFolder))
+            {
+                if (_sourceWatcher != null)
+                {
+                    _sourceWatcher.Changed -= SourceChanged;
                 }
+
+                _sourceWatcher = new FileSystemWatcher(Settings.Default.SourceFolder);
+                _sourceWatcher.NotifyFilter = NotifyFilters.LastWrite;
+                _sourceWatcher.Changed += SourceChanged;
+                _sourceWatcher.EnableRaisingEvents = true;
             }
         }
 
@@ -47,10 +53,11 @@ namespace XBMCompanion
 
         public string TargetFolder
         {
-            get { return _targetFolder; }
+            get { return Settings.Default.TargetFolder; }
             set
             {
-                _targetFolder = value;
+                Settings.Default.TargetFolder = value;
+                Settings.Default.Save();
                 RaisePropertyChanged("TargetFolder");
             }
         }        
@@ -69,15 +76,16 @@ namespace XBMCompanion
         internal void WindowLoaded()
         {
             MoveFiles();
+            WatchSource();
         }
 
         private void MoveFiles()
         {
-            if (!Directory.Exists(_targetFolder)) return;
+            if (!Directory.Exists(TargetFolder)) return;
 
-            foreach (var f in Directory.EnumerateFiles(_sourceFolder))
-            //foreach (var f in new[] { "Breaking.Bad.S05E10.HDTV.x264-ASAP.avi", "Breaking.Bad.S05E11.HDTV.x264-ASAP.avi", "Breaking.Bad.S05E12.HDTV.x264-EVOLVE.avi", "anotherfile.txt" })
+            foreach (var path in Directory.EnumerateFiles(SourceFolder))
             {
+                var f = Path.GetFileName(path);
                 var match = Regex.Match(f, "(.*)\\.S([0-9][0-9])E([0-9][0-9])");
                 if (match.Success)
                 {
@@ -86,18 +94,18 @@ namespace XBMCompanion
                     var episode = match.Groups[3].ToString();
                     var extension = Path.GetExtension(f);
 
-                    var targetFilename = string.Format("{0} - S{1}E{2}.{3}", name, season, episode, extension);
+                    var targetFilename = string.Format("{0} - S{1}E{2}{3}", name, season, episode, extension);
 
                     Log(string.Format("Moving {0} to {1}", f, targetFilename));
 
-                    var dir = Path.Combine(_targetFolder, name);
+                    var dir = Path.Combine(TargetFolder, name);
                     if (!Directory.Exists(dir))
                     {
                         Directory.CreateDirectory(dir);
                     }
                     
                     var targetPath = Path.Combine(dir, targetFilename);
-                    File.Move(f, targetPath);
+                    File.Move(path, targetPath);
                 }
             }
         }
