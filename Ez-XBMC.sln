@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2012 for Windows Desktop
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XBMCompanion", "XBMCompanion\XBMCompanion.csproj", "{58FD1494-DA1F-4196-B5FC-4973F2FC1774}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ez-XBMC", "Ez-XBMC\Ez-XBMC.csproj", "{58FD1494-DA1F-4196-B5FC-4973F2FC1774}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
