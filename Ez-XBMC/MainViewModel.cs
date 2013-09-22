@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using XBMCompanion.Properties;
+using EzXBMC.Properties;
 
-namespace XBMCompanion
+namespace EzXBMC
 {
     public class MainViewModel: ViewModel
     {

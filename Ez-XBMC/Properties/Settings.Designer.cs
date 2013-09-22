@@ -8,8 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace XBMCompanion.Properties
-{
+namespace EzXBMC.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace XBMCompanion
+namespace EzXBMC
 {
     public class ViewModel : INotifyPropertyChanged
     {
