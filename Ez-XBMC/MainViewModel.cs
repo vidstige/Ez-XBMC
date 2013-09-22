@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using EzXBMC.Properties;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace EzXBMC
 {
@@ -11,8 +13,26 @@ namespace EzXBMC
         private readonly List<string> _log = new List<string>();
         private FileSystemWatcher _sourceWatcher;
 
+        private readonly Thread _moveFilesThread;
+        private Dispatcher _dispatcher;
+        private ManualResetEvent _event = new ManualResetEvent(false);
+
+        public MainViewModel()
+        {
+            _moveFilesThread = new Thread(FileMover);
+            _moveFilesThread.Start(null);
+            _event.WaitOne();
+        }
+
         internal void Browse()
         {
+        }
+
+        private void FileMover(object parameter)
+        {
+            var _dispatcher = Dispatcher.CurrentDispatcher;
+            _event.Set();
+            Dispatcher.Run();
         }
 
         public string SourceFolder
