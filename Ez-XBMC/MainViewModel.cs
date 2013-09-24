@@ -14,12 +14,13 @@ namespace EzXBMC
         private FileSystemWatcher _sourceWatcher;
 
         private readonly Thread _moveFilesThread;
-        private Dispatcher _dispatcher;
+        private Dispatcher _bgDispatcher;
         private ManualResetEvent _event = new ManualResetEvent(false);
 
         public MainViewModel()
         {
             _moveFilesThread = new Thread(FileMover);
+            _moveFilesThread.IsBackground = true;
             _moveFilesThread.Start(null);
             _event.WaitOne();
         }
@@ -30,7 +31,7 @@ namespace EzXBMC
 
         private void FileMover(object parameter)
         {
-            var _dispatcher = Dispatcher.CurrentDispatcher;
+            _bgDispatcher = Dispatcher.CurrentDispatcher;
             _event.Set();
             Dispatcher.Run();
         }
@@ -60,14 +61,21 @@ namespace EzXBMC
                 }
 
                 _sourceWatcher = new FileSystemWatcher(Settings.Default.SourceFolder);
-                _sourceWatcher.NotifyFilter = NotifyFilters.LastWrite;
-                _sourceWatcher.Changed += SourceChanged;
+                _sourceWatcher.Error += _sourceWatcher_Error;
+                //_sourceWatcher.Filter = "*.*";
+                //_sourceWatcher.Changed += SourceChanged;
+                _sourceWatcher.Created += SourceChanged;
                 _sourceWatcher.EnableRaisingEvents = true;
             }
         }
 
+        private void _sourceWatcher_Error(object sender, ErrorEventArgs e)
+        {
+        }
+
         private void SourceChanged(object sender, FileSystemEventArgs e)
         {
+            Log(e.ChangeType.ToString());
             MoveFiles();
         }
 
