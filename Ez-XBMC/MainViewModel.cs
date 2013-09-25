@@ -62,8 +62,6 @@ namespace EzXBMC
 
                 _sourceWatcher = new FileSystemWatcher(Settings.Default.SourceFolder);
                 _sourceWatcher.Error += _sourceWatcher_Error;
-                //_sourceWatcher.Filter = "*.*";
-                //_sourceWatcher.Changed += SourceChanged;
                 _sourceWatcher.Created += SourceChanged;
                 _sourceWatcher.EnableRaisingEvents = true;
             }
@@ -108,6 +106,11 @@ namespace EzXBMC
         }
 
         private void MoveFiles()
+        {
+            _bgDispatcher.BeginInvoke(new Action(MoveFiles2));
+        }
+
+        private void MoveFiles2()
         {
             if (!Directory.Exists(TargetFolder)) return;
 
