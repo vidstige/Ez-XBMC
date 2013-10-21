@@ -1,8 +1,9 @@
-﻿using System;
+﻿using EzXBMC.Properties;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using EzXBMC.Properties;
 using System.Threading;
 using System.Windows.Threading;
 
