@@ -37,12 +37,12 @@ namespace EzXBMC
             Dispatcher.Run();
         }
 
-        public string SourceFolder
+        public DirectoryInfo SourceFolder
         {
-            get { return Settings.Default.SourceFolder; }
+            get { return string.IsNullOrEmpty(Settings.Default.SourceFolder) ? null : new DirectoryInfo(Settings.Default.SourceFolder); }
             set
             {
-                Settings.Default.SourceFolder = value;
+                Settings.Default.SourceFolder = value.FullName;
                 Settings.Default.Save();
 
                 RaisePropertyChanged("SourceFolder");
@@ -78,12 +78,12 @@ namespace EzXBMC
             MoveFiles();
         }
 
-        public string TargetFolder
+        public DirectoryInfo TargetFolder
         {
-            get { return Settings.Default.TargetFolder; }
+            get { return string.IsNullOrEmpty(Settings.Default.TargetFolder) ? null : new DirectoryInfo(Settings.Default.TargetFolder); }
             set
             {
-                Settings.Default.TargetFolder = value;
+                Settings.Default.TargetFolder = value.FullName;
                 Settings.Default.Save();
                 RaisePropertyChanged("TargetFolder");
             }
@@ -113,11 +113,11 @@ namespace EzXBMC
 
         private void MoveFiles2()
         {
-            if (!Directory.Exists(TargetFolder)) return;
+            if (TargetFolder == null || !TargetFolder.Exists) return;
 
-            foreach (var path in Directory.EnumerateFiles(SourceFolder))
+            foreach (var path in SourceFolder.EnumerateFiles())
             {
-                var f = Path.GetFileName(path);
+                var f = Path.GetFileName(path.FullName);
                 var match = Regex.Match(f, "(.*)\\.S([0-9][0-9])E([0-9][0-9])");
                 if (match.Success)
                 {
@@ -130,14 +130,14 @@ namespace EzXBMC
 
                     Log(string.Format("Moving {0} to {1}", f, targetFilename));
 
-                    var dir = Path.Combine(TargetFolder, name);
+                    var dir = Path.Combine(TargetFolder.FullName, name);
                     if (!Directory.Exists(dir))
                     {
                         Directory.CreateDirectory(dir);
                     }
                     
                     var targetPath = Path.Combine(dir, targetFilename);
-                    File.Move(path, targetPath);
+                    path.MoveTo(targetPath);
                 }
             }
         }

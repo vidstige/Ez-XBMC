@@ -16,6 +16,34 @@ namespace EzXBMC.Controls
             InitializeComponent();
         }
 
+        // Dependency Property
+        public static readonly DependencyProperty FolderProperty =
+             DependencyProperty.Register("Folder", typeof(DirectoryInfo),
+             typeof(FolderSelector), new PropertyMetadata(OnFolderChangedCallBack));
+
+        // .NET Property wrapper
+        public DirectoryInfo Folder
+        {
+            get { return (DirectoryInfo)GetValue(FolderProperty); }
+            set { SetValue(FolderProperty, value); }
+        }
+
+        private static void OnFolderChangedCallBack(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            var c = sender as FolderSelector;
+            if (c != null)
+            {
+                c.OnFolderChanged();
+            }
+        }
+
+        protected virtual void OnFolderChanged()
+        {
+            var folder = Folder;
+            if (folder == null) _text.Text = "Drop folder here";
+            else _text.Text = Folder.FullName;
+        }
+
         private void MyBorderedButton_DragEnter(object sender, DragEventArgs e)
         {
             Console.WriteLine("Drag Enter");
@@ -36,7 +64,7 @@ namespace EzXBMC.Controls
 
         private void Select(string directoryPath)
         {
-            _text.Text = directoryPath;
+            Folder = new DirectoryInfo(directoryPath);
         }
     }
 }

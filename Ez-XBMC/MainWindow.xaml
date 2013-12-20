@@ -15,13 +15,13 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0">Watch folder</TextBlock>
-        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SourceFolder}"></TextBox>
-
-        <controls:FolderSelector Grid.Row="0" Grid.Column="2" />
+        <!--<TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SourceFolder}"></TextBox>-->
+        <controls:FolderSelector Grid.Row="0" Grid.Column="1" Folder="{Binding SourceFolder, Mode=TwoWay}"/>
         
         <TextBlock Grid.Row="1" Grid.Column="0">Move to folder</TextBlock>
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding TargetFolder}"></TextBox>
-        
+        <!--<TextBox Grid.Row="1" Grid.Column="1" Text="{Binding TargetFolder}"></TextBox>-->
+        <controls:FolderSelector Grid.Row="1" Grid.Column="1" Folder="{Binding TargetFolder, Mode=TwoWay}"/>
+
         <TextBlock Grid.Row="2" Grid.ColumnSpan="3" Text="{Binding LogRows}"></TextBlock>
     </Grid>
 </Window>
