@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignWidth="200" d:DesignHeight="48">
-    <Border BorderThickness="2" Margin="4" Padding="4" AllowDrop="True" DragEnter="MyBorderedButton_DragEnter" Drop="MyBorderedButton_Drop">
+    <Border BorderThickness="2" Margin="4" AllowDrop="True" DragEnter="MyBorderedButton_DragEnter" Drop="MyBorderedButton_Drop">
         <Border.BorderBrush>
             <VisualBrush>
                 <VisualBrush.Visual>
@@ -20,7 +20,10 @@
             </VisualBrush>
         </Border.BorderBrush>
         
-        <TextBlock x:Name="_text" FontSize="18" Text="Drop folder here" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Grid>
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/> 
+            <TextBlock x:Name="_text" FontSize="18" Text="Drop folder here" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" />
+        </Grid>
         
     </Border>
 </UserControl>
