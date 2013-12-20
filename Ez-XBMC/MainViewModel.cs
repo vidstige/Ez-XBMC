@@ -63,15 +63,24 @@ namespace EzXBMC
 
                 _sourceWatcher = new FileSystemWatcher(Settings.Default.SourceFolder);
                 _sourceWatcher.Error += _sourceWatcher_Error;
-                _sourceWatcher.Created += SourceChanged;
+                _sourceWatcher.Created += SourceCreated;
+                _sourceWatcher.Changed += SourceChanged;
                 _sourceWatcher.EnableRaisingEvents = true;
             }
         }
 
         private void _sourceWatcher_Error(object sender, ErrorEventArgs e)
         {
+            Log("Error");
+            Log(e.ToString());
         }
 
+        private void SourceCreated(object sender, FileSystemEventArgs e)
+        {
+            Log(e.ChangeType.ToString());
+            MoveFiles();
+        }
+        
         private void SourceChanged(object sender, FileSystemEventArgs e)
         {
             Log(e.ChangeType.ToString());
